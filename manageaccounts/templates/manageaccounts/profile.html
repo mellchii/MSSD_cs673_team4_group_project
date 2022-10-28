@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+
+<div class="row">
+    <div class="card m-3 p-4" >
+        <div class="row g-0">
+          <div class="col-md-4">
+            <div class="d-flex justify-content-center">
+                <div class="d-none d-lg-block">
+                    <img
+                        src="{{ username.profile.profile_pic.url }}"
+                        class="rounded-circle ms-5"
+                        height=350
+                        width=350
+                        alt="Avatar"
+                        loading="lazy"
+                        />
+                </div>
+                <div class="d-lg-none">
+                    <img
+                        src="{{ username.profile.profile_pic.url }}"
+                        class="rounded-circle ms-5"
+                        height=150
+                        width=150
+                        alt="Avatar"
+                        loading="lazy"
+                        />
+                </div>
+                
+            </div>
+          </div>
+          <div class="col">
+            <div class="card-body">
+                <h5 class="card-title mt-1 fs-2 fw-bold lh-sm">{{username.first_name}} {{username.last_name}}</h5>
+                <h5 class="card-title mt-1 fs-2 fw-bold lh-sm">@{{username.username}}</h5>
+                <p class="card-text">{{username.profile.bio}}</p>
+
+                <ul class="list-group list-group-horizontal">
+                    {% if username.profile.facebook_url %}
+                    <li class="list-group-item">
+                    <a href="https://{{ username.profile.facebook_url }}" target="_blank" title="facebook link">
+                        <span class="fa fa-facebook-square fa-2x text-primary"></span>
+                    </a>
+                    </li >
+                    {% endif %}
+
+                    {% if username.profile.twitter_url %}
+                    <li class="list-group-item">
+                    <a href="https://{{ username.profile.twitter_url }}" target="_blank" title="twitter link">
+                        <span class="fa fa-twitter-square fa-2x text-info"></span>
+                    </a>
+                    </li>
+                    {% endif %}
+
+                    {% if username.profile.linkedin_url %}
+                    <li class="list-group-item">
+                    <a href="https://{{ username.profile.linkedin_url }}" target="_blank" title="linkedin link">
+                        <span class="fa fa-linkedin-square fa-2x text-info"></span>
+                    </a>
+                    </li>
+                    {% endif %}
+
+                    {% if username.profile.github_url %}
+                    <li class="list-group-item">
+                    <a href="https://{{ username.profile.github_url }}" target="_blank" title="github link">
+                        <span class="fa fa-github-square fa-2x text-dark"></span>
+                    </a>
+                    </li>
+                    {% endif %}
+
+                    {% if username.profile.website_url %}
+                    <li class="list-group-item">
+                    <a href="https://{{ username.profile.website_url }}" target="_blank" title="external link">
+                        <span class="fa fa-external-link-square fa-2x text-muted"></span>
+                    </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+
+            
+                <div class="d-flex flex-row justify-content-start align-items-start mt-1">
+                    <img class="m-1" src="{% static 'svgs/upvote.svg' %}" height="50" width="50" />
+                    <p class="fs-1 fw-normal lh-sm m-1">{{ up }}</p> 
+                    <img class="m-1" src="{% static 'svgs/downvote.svg' %}" height="50" width="50" />
+                    <p class="fs-1 fw-normal lh-sm m-1">{{down}}</p> 
+                </div> 
+                <p class="card-text"><small class="text-muted">Joined - {{username.date_joined}}</small></p>
+
+                {% if user.is_authenticated%}
+                {% if user.username == username.username%}
+                    <div class=" d-flex mt-2">  
+                        <a href="{% url 'editProfile' user.username %}" class="btn btn-outline-dark btn-sm my-2 me-2">
+                            <img src="{% static 'svgs/pen.svg' %}" /> Edit Profile
+                        </a>
+                        <a href="{% url 'changePassword' %}" class="btn btn-outline-dark btn-sm my-2 me-2">
+                            <img src="{% static 'svgs/lock.svg' %}" /> Change Password
+                        </a>
+                        <a class="btn btn-outline-dark btn-sm my-2 me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <img src="{% static 'svgs/trash.svg' %}" /> Delete Profile
+                        </a>
+                    </div> 
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete User</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                Are you sure you want to delete user : {{ user.username }}
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a class="btn btn-primary" href="{% url 'deleteUser' user.username %}" >Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                {% endif %}
+                {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+<div class="row">
+    <div class="card m-3 p-4"> 
+        <div class = 'container-fluid'>
+            <div class="row align-items-center justify-content-center">
+        
+            {% for post in posts %}
+              {% block feeds %}
+                {% include 'post/feeds.html' %}
+              {% endblock %}
+            {% endfor %}
+            </div>
+            
+            <div class="row">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if posts.has_previous %}
+                            <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ posts.previous_page_number }}">Previous</a></li>
+                        {% endif %}
+                        {% if posts.has_next %}
+                            <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ posts.next_page_number }}">Next</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div> 
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<figure class="text-center">
+    <h1 class="display-3 mt-3">Update Profile</h1>
+</figure>
+<br/><br/>
+<div class="form-group">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            {{u_form.as_p}}
+            {{p_form.as_p}}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>    
+</div>
+    
+{% endblock %}

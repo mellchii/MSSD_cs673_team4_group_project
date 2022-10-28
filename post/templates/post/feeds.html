@@ -1,0 +1,145 @@
+{% block feeds %}
+{% load static %}
+
+<div id="post" >
+    <div class="card bg-white p-2 my-2" style="box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);">
+
+      <h3 class="card-title" >
+        <a class="text-dark" data-bs-toggle="tooltip" data-bs-title="click to view post" style="text-decoration: none;" href="{% url 'postDetail' post.pk %}">
+            <strong id="post_title">{{ post.title}}</strong>
+        </a>
+    </h3>
+
+      {% if user == post.creator %}
+      <div>
+        <a href="{% url 'editPost' post.pk %}" class="btn btn-outline-dark btn-sm my-2 me-2">
+          <img src="{% static 'svgs/pen.svg' %}" /> Edit Post
+        </a>
+        <a class="btn btn-outline-dark btn-sm my-2 me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <img src="{% static 'svgs/trash.svg' %}" /> Delete Post
+        </a>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Post</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                Are you sure you want to delete post : {{ post.title }}
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'deletePost' post.pk %}" >Delete</a>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      {% endif %}
+
+      <div id="post_content" style="padding-left:0px; padding-top: 15px;">{{ post.content|slice:":450"|safe}}...</div>
+      <hr>
+
+      <div class = "container m-1" style="color:gray; min-width: -webkit-fill-available;">
+        <div class="row">
+          <!-- Tags -->
+          <div class="col-10">
+            {% for tag in post.tags.all %}
+            <a class="btn btn-secondary btn-sm post_tag me-1 mt-1" href="{% url 'tagged' tag.slug %}" role="button"><div style="font-size: smaller;">{{ tag.name }}</div></a>
+            {% endfor %}
+          </div>
+
+          <!-- Action buttons -->
+          <div class="col mt-1">
+            <div class="d-flex justify-content-end ">
+              <span id="{{ post.id }}" data-value="{{post.id}}"></span>
+              <div class="pr-2">
+                <span id="i_like_this"><span id="up-{{post.id}}">{{post.upvotes}}</span></span>
+                <a {% if request.user.is_authenticated %}
+                  class="btn btn-link text-dark p-0 border-0 btn-outline-light thumbaction" {% else %}
+                  href="#" class="btn btn-link text-dark p-0 border-0 btn-outline-light"
+                  {% endif %} value="thumbsup" data-value="{{post.id}}" data-toggle="tooltip" title="I like this" role="button">
+                  <span style="padding:3px"><i id="thumbsup" width="1.4em" height="1.4em" class="fa fa-thumbs-up"></i></span>
+                </a>
+              </div>
+              <div class="pr-2" style="padding-left:12px">
+                <span id="down-{{post.id}}">{{post.downvotes}}</span>
+                <a {% if request.user.is_authenticated %}
+                  class="btn btn-link text-dark p-0 border-0 btn-outline-light thumbaction" {% else %}
+                  href="#" class="btn btn-link text-dark p-0 border-0 btn-outline-light"
+                  {% endif %} value="thumbsdown" data-value="{{post.id}}" data-toggle="tooltip" title="I dont like this" role="button">
+                  <span style="padding:3px"><i id="thumbsdown" width="1.4em" height="1.4em" class="fa fa-thumbs-down"></i></span>
+                </a>
+              </div>
+              <div class="pr-2" style="padding-left:12px">
+                <span>{{post.comments.count}}</span>
+                <span><i class="fa fa-comment"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2"> 
+          
+          <div class="col">
+            <div class="d-flex justify-content-start">
+              {% if post.creator.profile.profile_pic %}
+              <img
+                src="{{ post.creator.profile.profile_pic.url }}"
+                class="rounded-circle"
+                height=50
+                width=50
+                alt="Avatar"
+                loading="lazy"
+              />
+              {% endif %}
+              <div class="d-flex align-items-center w-100 ps-3">
+                <div class="w-100" id="post-footer">
+                    Posted by @<b style="font-size: 1.2em"><a id="post_author" href="{% url 'profile' post.creator %}">{{ post.creator }}</a></b> on {{ post.date }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bookmark buttons -->
+          <div class="col">
+            {% if user.is_authenticated %}
+            <div class="d-flex justify-content-end">
+              <div class="pr-2" style="padding-left:12px">
+                <span>
+                  {% if user in post.favorites.all %}
+                  
+                    <a type="button" class="btn btn-danger btn-sm" href="{% url 'favoritePost' post.pk %}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmarks" viewBox="0 0 16 16">
+                        <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z"></path>
+                        <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z"></path>
+                      </svg>
+                      UnBookmark
+                    </a>
+                  {% else %}
+
+                  <a id='bookmark_post' type="button" class="btn btn-primary btn-sm" href="{% url 'favoritePost' post.pk %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmarks" viewBox="0 0 16 16">
+                      <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z"></path>
+                      <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z"></path>
+                    </svg>
+                    Bookmark
+                  </a>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            {% endif%}
+          </div> 
+
+               
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

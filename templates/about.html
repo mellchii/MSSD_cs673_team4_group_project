@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<!-- Header -->
+<header class="bg-primary text-center py-3 mb-3">
+    <div class="container">
+      <h1 class="fw-light text-white">Meet the Team</h1>
+    </div>
+  </header>
+  
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <!-- Team Member 1 -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow">
+          <img src="{% static 'team/prashant.png' %}" height=300 width=350 class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Prashant Bhandari</h5>
+            <div class="card-text text-black-50">Leader</div>
+            <div class="card-text text-black-50">QA leader</div>
+          </div>
+        </div>
+      </div>
+      <!-- Team Member 2 -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow">
+          <img src="{% static 'team/gabriel.jpg' %}" height=300 width=350 class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Gabriel Ako</h5>
+            <div class="card-text text-black-50">Requirement Leader</div>
+            <div class="card-text text-black-50"> </div>
+          </div>
+        </div>
+      </div>
+      <!-- Team Member 3 -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow">
+          <img src="{% static 'team/Hui Wang.jpg' %}" height=300 width=350 class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Hui Wang</h5>
+            <div class="card-text text-black-50">QA leade</div>
+            <div class="card-text text-black-50">Security Leader</div>
+          </div>
+        </div>
+      </div>
+      <!-- Team Member 4 -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow">
+          <img src="{% static 'team/Mike.jpg' %}" height=300 width=350 class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Mike Blanchet</h5>
+            <div class="card-text text-black-50">Design and Implementation Leader</div>
+            <div class="card-text text-black-50">Configuration leader</div>
+          </div>
+        </div>
+      </div>
+      <!-- Team Member 5 -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow">
+          <img src="{% static 'team/sean.jpg' %}" height=300 width=350 class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Sean Shea</h5>
+            <div class="card-text text-black-50">Design and Implementation Leader</div>
+            <div class="card-text text-black-50">Configuration leader</div>
+          </div>
+        </div>
+      </div>
+      <!-- Team Member 6 -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-0 shadow">
+          <img src="{% static 'team/Tiffany.jpg' %}" height=300 width=350 class="card-img-top" alt="...">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Tiffany Yu</h5>
+            <div class="card-text text-black-50">Security leader</div>
+            <div class="card-text text-black-50">Requirement leader</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  
+  </div>
+  <!-- /.container -->
+{% endblock %}

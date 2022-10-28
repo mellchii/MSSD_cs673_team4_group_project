@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class = 'container-fluid'>
+
+  <div class = 'row'>    
+    <div class="col"> 
+        <div class="list-group list-group-horizontal text-nowrap overflow-auto">
+          <a class="btn btn-sm btn-outline-info m-1 list-group-item list-group-item-action" href="{% url 'home' %}" role="button">Home</a>
+
+          {% for tag in tags %}
+          <a class="btn btn-sm btn-outline-info m-1 list-group-item list-group-item-action" href="{% url 'tagged' tag.slug %}" role="button">{{ tag }}</a>
+          {% endfor %}
+        </div>
+        
+    </div>
+  </div>
+
+  <div class="row align-items-center justify-content-center">
+    {% for post in posts %}
+      {% block feeds %}
+        {% include 'post/feeds.html' %}
+      {% endblock %}
+    {% endfor %}
+  </div>
+    
+  <div class="row">
+
+    {% if posts.has_previous %}
+    <div class="d-flex justify-content-start">
+      <a type="button" class="btn btn-outline-primary" href="{% url 'home' %}?page={{ posts.previous_page_number }}">Previous</a>
+    </div>
+    {% endif %}
+    {% if posts.has_next %}
+    <div class="d-flex justify-content-end">
+      <a type="button" class="btn btn-outline-primary" href="{% url 'home' %}?page={{ posts.next_page_number }}">Next</a>
+    </div>
+    {% endif %}
+
+    </div>
+
+
+
+</div>
+
+{% endblock %}
+
+

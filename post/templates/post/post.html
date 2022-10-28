@@ -1,0 +1,39 @@
+
+{% extends 'base.html' %}
+
+{% block style %}
+    <script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.css"></script>
+{% endblock %}
+
+
+{% block content %}
+<figure class="text-center">
+    <h1 class="display-3 mt-3">Add New Project</h1>
+</figure>
+<br/><br/>
+<div class="form-group">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="my-3 ">
+            {% csrf_token %}
+            <label class="form-label fs-3">Add a title for your project</label>
+            {{ form.title }}
+
+            <label class="form-label mt-4 fs-3">Describe your project</label>
+            {{ form.content }}
+
+            <label class="form-label mt-4 fs-3">Select the most appropriate category</label>
+            {{ form.category }}
+
+            <label class="form-label mt-4 fs-3">Upload images</label>
+            {{ form.image_file }}
+
+            <label class="form-label mt-4 fs-3">Tags</label>
+            {{ form.tags }}
+
+        </div>
+
+        <button id='submit' type="submit" class="btn btn-primary">Submit</button>
+    </form>    
+</div>
+
+{% endblock %}

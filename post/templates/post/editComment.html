@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+<div class="col-10 d-flex justify-content-center">
+    <div>
+        <small>Posted: {{ post.date }}</small><br/>
+        <h1> {{post.title}}</h1> 
+        <small>Category: {{ post.category }}</small><br/>
+        <small> By {{post.creator}}</small> <br/>
+
+        <hr>
+        <br/>
+        {{post.content}}
+        
+        <br/> <br/>
+
+          <div class="container-fluid">
+            <div class="card-body">
+              <h3>Leave a comment</h3>
+              <form method="post" style="margin-top: 1.3em;">
+                {{ comment_form.as_p }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary  btn-lg">Edit</button>
+              </form>
+            </div>
+          </div>
+
+    </div>
+  
+</div>
+  
+{% endblock %}
